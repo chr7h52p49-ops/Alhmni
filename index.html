@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جمعية ألهمني لتنمية القدرات الشبابية - بوابة التسجيل والمشاركة</title>
+    <!-- استيراد الخطوط العربية العصرية -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- مكتبة أيقونات FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1e3a8a; /* الأزرق الملكي المعتمد لهوية ألهمني */
+            --secondary-color: #3b82f6;
+            --accent-color: #f59e0b;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-light: #64748b;
+            --danger-color: #ef4444;
+            --success-color: #10b981;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* الهيدر وشريط التنقل */
+        header {
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+
+        .brand-text h1 {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .brand-text span {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        /* الحاويات والصفحات */
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            width: 100%;
+            flex: 1;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            border-top: 5px solid var(--primary-color);
+        }
+
+        /* الشاشات (تنتقل تفاعلياً عبر JavaScript) */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* عناصر الواجهة الأولى */
+        .hero-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .hero-desc {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.9rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        /* شاشة الكشف والتوعية الفورية */
+        .alert-box {
+            background-color: #fef2f2;
+            border: 2px dashed var(--danger-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .alert-box h2 {
+            color: var(--danger-color);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-box p {
+            color: #7f1d1d;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        /* المحتوى التوعوي والأقسام */
+        .awareness-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .awareness-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+
+        .awareness-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-color: var(--secondary-color);
+        }
+
+        .awareness-card i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .awareness-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .awareness-card p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        /* الاختبار التفاعلي */
+        .quiz-container {
+            margin-top: 1rem;
+        }
+
+        .question-box {
+            background: #f1f5f9;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .options-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .options-list li {
+            background: white;
+            padding: 0.85rem 1rem;
+            margin-bottom: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .options-list li:hover {
+            background: #e2e8f0;
+            border-color: var(--primary-color);
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .feedback.correct {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #34d399;
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #f87171;
+            display: block;
+        }
+
+        /* أزرار التنقل بين الأقسام */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .btn-secondary {
+            background-color: #64748b;
+            width: auto;
+            padding: 0.7rem 1.5rem;
+        }
+
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+
+        /* الفوتر الرسمي الإلزامي */
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-top: auto;
+        }
+
+        /* التجاوب مع الجوال */
+        @media (max-width: 768px) {
+            .card {
+                padding: 1.5rem;
+            }
+            .hero-title {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- هيدر الموقع -->
+    <header>
+        <div class="brand">
+            <!-- شعار جمعية ألهمني -->
+            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%231e3a8a'/><text x='50' y='58' font-size='35' fill='white' text-anchor='middle' font-family='Arial'>أ</text></svg>" alt="شعار جمعية ألهمني">
+            <div class="brand-text">
+                <h1>جمعية ألهمني لتنمية القدرات الشبابية</h1>
+                <span>الرخصة رقم 200 | الرقم الوطني الموحد 986236507</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- المحتوى الرئيسي -->
+    <div class="container">
+
+        <!-- الشاشة الأولى: واجهة الدعوة الرسمية (خدعة التصيد) -->
+        <div id="screen-1" class="screen active">
+            <div class="card">
+                <h2 class="hero-title">دعوة خاصة: الانضمام إلى ورشة "مهارات القيادة الرقمية والذكاء الاصطناعي"</h2>
+                <p class="hero-desc">
+                    في إطار جهود جمعية ألهمني المستمرة لتمكين الشباب بمهارات حياتية ومعرفية ملهمة، ندعوكم للمشاركة في الورشة التطويرية الحصرية. سجل بياناتك أدناه لتأكيد مقعدك واستلام رابط الدخول مباشرة عبر البريد الإلكتروني.
+                </p>
+                <form id="phishingForm" onsubmit="triggerTrap(event)">
+                    <div class="form-group">
+                        <label for="fullName">الاسم الكامل:</label>
+                        <input type="text" id="fullName" class="form-control" placeholder="أدخل اسمك الكريم" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">البريد الإلكتروني:</label>
+                        <input type="email" id="email" class="form-control" placeholder="name@example.com" required>
+                    </div>
+                    <button type="submit" class="btn">تأكيد التسجيل والمشاركة</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- الشاشة الثانية: لحظة الكشف والتوعية -->
+        <div id="screen-2" class="screen">
+            <div class="card">
+                <div class="alert-box">
+                    <h2><i class="fa-solid fa-triangle-exclamation"></i> تنبيه توعوي هام: لقد تعرضت لمحاكاة تصيد إلكتروني!</h2>
+                    <p>لا تقلق! لم يتم حفظ أي من بياناتك أو إرسالها لأي خادم خارجي؛ فهذه مجرد تجربة محاكاة أمان محلية تهدف إلى رفع وعيك الرقمي.</p>
+                </div>
+
+                <h3 style="color: var(--primary-color); margin-bottom: 1rem;"><i class="fa-solid fa-shield-halved"></i> ماذا نتعلم من هذه التجربة؟</h3>
+                <ul style="line-height: 1.8; padding-right: 1.5rem; color: var(--text-color); margin-bottom: 2rem;">
+                    <li><strong>المظهر والشعار لا يكفيان:</strong> استخدام اسم جمعية ألهمني وشعارها الرسمي لا يعني بالضرورة أن الموقع موثوق بنسبة 100% إذا تم الوصول إليه عبر رابط مشبوه.</li>
+                    <li><strong>خطر إدخال البيانات:</strong> إدخال الاسم والبريد الإلكتروني في صفحات غير موثوقة يعرض خصوصيتك لخطر السرقة واستغلالها في رسائل احتيالية مستهدفة.</li>
+                    <li><strong>التحقق الدائم:</strong> يجب دائماً مراجعة نطاق الموقع (URL) والجهة المرسلة قبل كتابة أي معلومات شخصية.</li>
+                </ul>
+
+                <button class="btn" onclick="goToScreen(3)">تابع استكشاف الدليل التوعوي الكامل</button>
+            </div>
+        </div>
+
+        <!-- الشاشة الثالثة: المحتوى التوعوي الشامل -->
+        <div id="screen-3" class="screen">
+            <div class="card">
+                <h2 class="hero-title">دليل الحماية والتوعية الرقمية</h2>
+                <p class="hero-desc">تعرف على أساليب المخترقين وكيف تحمي بياناتك الشخصية والمهنية بكل إتقان.</p>
+
+                <div class="awareness-grid">
+                    <div class="awareness-card">
+                        <i class="fa-solid fa-fish-fins"></i>
+                        <h3>ما هو التصيد الإلكتروني؟</h3>
+                        <p>أسلوب احتيالي خبيث يهدف لسرقة البيانات الحساسة عبر انتحال صفة جهات رسمية موثوقة.</p>
+                    </div>
+                    <div class="awareness-card">
+                        <i class="fa-solid fa-link-slash"></i>
+                        <h3>الروابط المزيفة</h3>
+                        <p>تستخدم روابط تقلد المواقع الأصلية مع تغيير بسيط في الحروف (مثل استبدال حرف بآخر) لخداع الضحية.</p>
+                    </div>
+                    <div class="awareness-card">
+                        <i class="fa-solid fa-masks-theater"></i>
+                        <h3>انتحال الهوية</h3>
+                        <p>استغلال أسماء جمعيات خيرية، أو مؤسسات حكومية وبنوك لكسب الثقة السريعة.</p>
+                    </div>
+                    <div class="awareness-card">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <h3>رسائل الاستعجال</h3>
+                        <p>أسلوب تخويفي يضغط عليك نفسياً بعبارات مثل "حسابك سيُغلق خلال ساعات" لدفعك للتصرف دون تفكير.</p>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="goToScreen(2)">السابق</button>
+                    <button class="btn" onclick="goToScreen(4)">الانتقال للاختبار التفاعلي</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- الشاشة الرابعة: الاختبار التفاعلي (Quiz) -->
+        <div id="screen-4" class="screen">
+            <div class="card">
+                <h2 class="hero-title">اختبر جاهزيتك الرقمية</h2>
+                <p class="hero-desc">اختر التصرف السليم في المواقف التالية واكتشف مدى وعيك:</p>
+
+                <div class="quiz-container">
+                    <div class="question-box">
+                        <h3 style="margin-bottom: 0.5rem; color: var(--primary-color);">الموقف: وصلتك رسالة نصية من جهة تبدو رسمية تطلب منك تحديث بياناتك المصرفية فوراً عبر رابط مختصر، ما هو التصرف السليم؟</h3>
+                        <ul class="options-list">
+                            <li onclick="checkAnswer(this, false)">أ) أضغط على الرابط وأحدث بياناتي بسرعة قبل إغلاق الحساب.</li>
+                            <li onclick="checkAnswer(this, true)">ب) أتجاهل الرابط تماماً وأتواصل مع الجهة الرسمية عبر قنواتها المعتمدة المتكدة.</li>
+                            <li onclick="checkAnswer(this, false)">ج) أرسل بياناتي لأحد أصدقائي ليتأكد من صحة الرابط نيابة عني.</li>
+                        </ul>
+                        <div id="quiz-feedback" class="feedback"></div>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="goToScreen(3)">السابق</button>
+                    <button class="btn" onclick="goToScreen(5)">الخاتمة والرسالة التوعوية</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- الشاشة الخامسة: الخاتمة -->
+        <div id="screen-5" class="screen">
+            <div class="card" style="text-align: center;">
+                <div style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;">
+                    <i class="fa-solid fa-award"></i>
+                </div>
+                <h2 class="hero-title">مبروك إتمام التجربة التوعوية!</h2>
+                <p class="hero-desc" style="font-size: 1.2rem; font-weight: 600; color: var(--text-color); margin: 2rem 0; padding: 1.5rem; background: #f8fafc; border-radius: 10px; border-right: 5px solid var(--primary-color);">
+                    «لا تجعل ثقتك بالمظهر تسبق تحققك من المصدر؛ فوعيك الرقمي هو خط دفاعك الأول».
+                </p>
+                <button class="btn" onclick="resetExperience()">إعادة التجربة من البداية</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- الفوتر الرسمي الإلزامي -->
+    <footer>
+        تمت بواسطة جمعية ألهمني لتنمية القدرات الشبابية
+    </footer>
+
+    <!-- سكريبت البرمجة التفاعلية -->
+    <script>
+        // دالة التنقل بين الشاشات
+        function goToScreen(screenNumber) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(`screen-${screenNumber}`).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // محاكاة اصطياد الفخ (الانتقال لصفحة الكشف والتوعية فور الضغط محلياً)
+        function triggerTrap(event) {
+            event.preventDefault(); // منع إرسال بيانات حقيقية لأي خادم
+            // تصفير الحقول محلياً وحماية الخصوصية المطلقة
+            document.getElementById('fullName').value = '';
+            document.getElementById('email').value = '';
+            // الانتقال الفوري لشاشة المفاجأة والكشف
+            goToScreen(2);
+        }
+
+        // فحص إجابة الاختبار التفاعلي
+        function checkAnswer(element, isCorrect) {
+            const feedback = document.getElementById('quiz-feedback');
+            const options = element.parentElement.querySelectorAll('li');
+            
+            options.forEach(opt => opt.style.pointerEvents = 'none'); // تعطيل النقر المتكرر
+
+            if (isCorrect) {
+                element.style.backgroundColor = '#d1fae5';
+                element.style.borderColor = '#10b981';
+                feedback.className = 'feedback correct';
+                feedback.innerHTML = '<strong>إجابة صحيحة وموفقة!</strong> الجهات الرسمية لا تطلب بيانات حساسة عبر روابط مختصرة، والتحقق المسبق يحميك من الاحتيال.';
+            } else {
+                element.style.backgroundColor = '#fee2e2';
+                element.style.borderColor = '#ef4444';
+                feedback.className = 'feedback incorrect';
+                feedback.innerHTML = '<strong>إجابة خاطئة.</strong> الضغط على الروابط في رسائل الاستعجال يعرضك لاختراق مباشر وسرقة بياناتك.';
+            }
+        }
+
+        // إعادة ضبط التجربة
+        function resetExperience() {
+            document.querySelectorAll('.options-list li').forEach(opt => {
+                opt.style.pointerEvents = 'auto';
+                opt.style.backgroundColor = 'white';
+                opt.style.borderColor = '#cbd5e1';
+            });
+            document.getElementById('quiz-feedback').className = 'feedback';
+            document.getElementById('quiz-feedback').innerHTML = '';
+            goToScreen(1);
+        }
+    </script>
+</body>
+</html>
